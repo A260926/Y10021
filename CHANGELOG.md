@@ -21,6 +21,20 @@ All notable changes to similar are documented here.
   conflict markers, which let a label add lines to the output that looked like
   merged content.  Line terminators in labels are now replaced with spaces.
   #101
+* Added a stage-by-stage normalization analysis (`ANALYSIS.md`) and a targeted
+  tracker test (`tests/pipeline_tracker.rs`) covering `Myers`, `Patience`,
+  `Histogram`, `Lcs`, and `Hunt` from raw hook captures through `Replace`,
+  `Compact`, the public `DiffOp` slice, and the `iter_changes`/text/udiff/
+  three-way merge consumers.  The tests use a fixed corpus with repeated
+  lines, interleaved block moves, empty endpoints, and equal-cost LCS
+  candidates, plus deterministic property sweeps and already-expired
+  deadlines (no sleeps or network access).  They pin down range coverage
+  invariants at every stage, when compact shifts boundaries across equal
+  items, how deadline fallbacks (including LCS' per-side cursor offset) stay
+  structurally valid, that hook errors keep their original cause and offsets,
+  and that both compact paths (in-vector and the 64-op gap-buffer cutoff)
+  produce contiguous, reconstructing scripts.  No public behavior, algorithm
+  tie-breaks, or deadline semantics changed.
 
 ## 3.2.0
 
